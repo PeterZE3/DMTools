@@ -2,7 +2,7 @@ import random
 import string
 import math
 
-def roll(die_size = 20, mod = 0):
+def roll(die_size:int = 20, mod:int = 0):
   roll = random.randint(1,die_size)
   mod = int(mod)
   return roll + mod
@@ -21,7 +21,7 @@ def genstats():
    return stats
         
 
-def rolladv(show = False, mod = 0):
+def rolladv(show:bool = False, mod:int = 0):
   roll1 = random.randint(1,20)
   roll2 = random.randint(1,20)
   if show == True:
@@ -32,13 +32,9 @@ def rolladv(show = False, mod = 0):
     roll = roll2
   else:
     roll = roll1
-  try:
-    mod = int(mod)
-  except ValueError:
-    print("Please input your modifier as only an integer.")
   return roll + mod
 
-def rolldisadv(show = False, mod = 0):
+def rolldisadv(show:bool = False, mod:int = 0):
   roll1 = random.randint(1,20)
   roll2 = random.randint(1,20)
   if show == True:
@@ -49,19 +45,15 @@ def rolldisadv(show = False, mod = 0):
     roll = roll2
   else:
     roll = roll1
-  try:
-    mod = int(mod)
-  except ValueError:
-    print("Please input your modifier as only an integer.")
   return roll + mod
 
-def modcalc(stat):
+def modcalc(stat:int):
   mod = (stat - 10) // 2
   if mod > 0:
     mod = "+" + str(mod)
   return mod
 
-def genprofs(total_profs: int = 2):
+def genprofs(total_profs:int = 2):
   options = ["Athletics", "Acrobatics", "Sleight of Hand", "Stealth",
   "Arcana", "History", "Investigation", "Nature", "Religon", "Animal Handling", 
   "Insight", "Medicine", "Perception", "Survival", "Deception", "Intimidation",
@@ -121,11 +113,11 @@ def genrace():
     race = f"{race} ({type})"
   return race
 
-def genhp(CR: int = 1, Con_mod: int = 0):
+def genhp(CR: int = 1, Con_mod: int = 0, die_size:int = 8):
   hp = 0
   i = 0
   while i != CR:
-    hp += roll(8, Con_mod)
+    hp += roll(die_size, Con_mod)
     i += 1
   return hp
 
