@@ -1,3 +1,4 @@
+from os import stat
 import random
 import string
 import math
@@ -93,12 +94,12 @@ def genlan(total_languages: int = 2): #Common is assumed
 
 def genrace():
   options = ["Human", "Elf", "Dwarf", "Orc", "Half Elf", "Gnome", "Halfling", "Dragonborn",
-  "Tiefling", "Aasimar", "Vedalken", "Yuan-ti", "Half Orc", "Orc of Exandria", "Leonin", "Satyr",
+  "Tiefling", "Aasimar", "Vedalken", "Yuan-ti", "Half Orc", "Leonin", "Satyr",
   "Fairy", "Harengon", "Owlin", "Aarakocra", "Genasi", "Goliath", "Bugbear", "Firbolg", "Goblin",
   "Hobgoblin", "Kenku", "Kobold", "Lizardfolk", "Tabaxi", "Triton", "Feral Tiefling", "Tortle", 
-  "Changeling", "Kalashtar", "Orc of Eberron", "Shifter", "Warforged", "Gith", "Centaur", "Loxodon",
+  "Changeling", "Kalashtar", "Shifter", "Warforged", "Gith", "Centaur", "Loxodon",
   "Minotaur", "Simic Hybrid", "Verdan", "Locathah", "Grung"]
-  race = options[random.randint(0, (len(options)-1))]
+  race = random.choice(options)
   if race == "Dragonborn":
     types = ["Black", "Blue", "Brass", "Bronze", "Copper", "Gold", "Green", "Red", "Silver", "White"]
     type = types[random.randint(0, (len(types)-1))]
@@ -108,7 +109,27 @@ def genrace():
     type = types[random.randint(0, (len(types)-1))]
     race = f"{race} ({type})"
   if race == "Elf":
-    types = ["High", "Wood", "Dark"]
+    types = ["High", "Wood", "Dark", "Eladrin", "Sea", "Shadar-kai", "Eladrin"]
+    type = types[random.randint(0, (len(types)-1))]
+    race = f"{race} ({type})"
+  if race == "Dwarf":
+    types = ["Hill", "Mountain", "Gray"]
+    type = types[random.randint(0, (len(types)-1))]
+    race = f"{race} ({type})"
+  if race == "Shifter":
+    types = ["Beasthide", "Longtooth", "Swiftstride", "Wildhunt"]
+    type = types[random.randint(0, (len(types)-1))]
+    race = f"{race} ({type})"
+  if race == "Aasimar":
+    types = ["Protector", "Scourge", "Fallen"]
+    type = types[random.randint(0, (len(types)-1))]
+    race = f"{race} ({type})"
+  if race == "Halfling":
+    types = ["Lightfoot", "Stout", "Ghostwise"]
+    type = types[random.randint(0, (len(types)-1))]
+    race = f"{race} ({type})"
+  if race == "Gnome":
+    types = ["Forest", "Rock", "Deep"]
     type = types[random.randint(0, (len(types)-1))]
     race = f"{race} ({type})"
   return race
@@ -128,6 +149,35 @@ def crtoprof(CR: int):
   return prof
 
 
+#Code from user ichabod801
+def genname():
+
+  FIRST = ['A', 'Ag', 'Ar', 'Ara', 'Anu', 'Bal', 'Bil', 'Boro', 'Bern', 'Bra', 'Cas', 'Cere', 'Co', 'Con',
+    'Cor', 'Dag', 'Doo', 'Elen', 'El', 'En', 'Eo', 'Faf', 'Fan', 'Fara', 'Fre', 'Fro', 'Ga', 'Gala', 'Has', 
+    'He', 'Heim', 'Ho', 'Isil', 'In', 'Ini', 'Is', 'Ka', 'Kuo', 'Lance', 'Lo', 'Ma', 'Mag', 'Mi', 'Mo', 
+    'Moon', 'Mor', 'Mora', 'Nin', 'O', 'Obi', 'Og', 'Pelli', 'Por', 'Ran', 'Rud', 'Sam',  'She', 'Sheel', 
+    'Shin', 'Shog', 'Son', 'Sur', 'Theo', 'Tho', 'Tris', 'U', 'Uh', 'Ul', 'Vap', 'Vish', 'Ya', 'Yo', 'Yyr']
+ 
+  SECOND = ['ba', 'bis', 'bo', 'bus', 'da', 'dal', 'dagz', 'den', 'di', 'dil', 'din', 'do', 'dor', 'dra', 
+    'dur', 'gi', 'gauble', 'gen', 'glum', 'go', 'gorn', 'goth', 'had', 'hard', 'is', 'ki', 'koon', 'ku', 
+    'lad', 'ler', 'li', 'lot', 'ma', 'man', 'mir', 'mus', 'nan', 'ni', 'nor', 'nu', 'pian', 'ra', 'rak', 
+    'ric', 'rin', 'rum', 'rus', 'rut', 'sek', 'sha', 'thos', 'thur', 'toa', 'tu', 'tur', 'tred', 'varl',
+    'wain', 'wan', 'win', 'wise', 'ya']
+
+  name = random.choice(FIRST) + random.choice(SECOND)
+
+  return name
+
+
+
+def genclass():
+  classes = ["Artificer", "Barbarian", "Bard", "Blood Hunter", "Cleric", "Druid", "Fighter", "Monk", 
+  "Paladin", "Ranger", "Rogue", "Sorcerer", "Warlock", "Wizard"]
+  choice = random.choice(classes)
+  return choice
+
+
+
 
 def randnpc(name: string = "", CR: int = 1, num_profs: int = 2, num_lan: int = 2, num_saves: int = 2):
   statblock = {
@@ -144,6 +194,8 @@ def randnpc(name: string = "", CR: int = 1, num_profs: int = 2, num_lan: int = 2
   printsaves = ""
   statprint = ""
   conmod = 0
+  if name == "":
+    name = genname()
   stats = genstats()
   for i in range(0,6):
     num = stats[i]
@@ -170,8 +222,139 @@ def randnpc(name: string = "", CR: int = 1, num_profs: int = 2, num_lan: int = 2
   printout = f"Name:{name}\nRace:{race}\nHit Points:{hp}\n{statprint}\nProfiency Bonus: +{profbonus}\nSaves:{printsaves}\nProfiencies:{printprofs}\nLanguages:{printlan}"
   return printout
 
+def assignstats(stats:list, toptwo:list):
+  i = len(stats) - 1
+  order = ["STR", "DEX", "CON", "INT", "WIS", "CHA"]
+  statblock = {"STR" : 0, "DEX" : 0, "CON" : 0, "INT" : 0, "WIS" : 0, "CHA" : 0}
+  stats.sort()
+
+  for e in toptwo:
+    statblock[e] = stats[i]
+    stats.pop(i)
+    order.remove(e)
+    i -= 1
+  
+  i = len(stats) - 1 
+  random.shuffle(stats)
+
+  for e in order:
+    statblock[e] = stats[i]
+    i -= 1
+
+  return statblock
+
+
+def racialbonus(statblock:dict, race:str):
+  STRplus2 = ["Dwarf (Mountain)", "Half Orc", "Goliath", "Bugbear", "Orc", "Githyanki", "Tortle", "Shifter (Longtooth)", 
+  "Centaur", "Minotaur", "Dragonborn (Black)", "Dragonborn (Blue)", "Dragonborn (Brass)", "Dragonborn (Bronze)", "Dragonborn (Copper)", 
+  "Dragonborn (Gold)", "Dragonborn (Green)", "Dragonborn (Red)", "Dragonborn (Silver)", "Dragonborn (White)",]
+  STRplus1 = ["Genasi (Earth)", "Dwarf (Gray)", "Aasimar (Fallen)", "Firbolg", "Triton", 
+  "Shifter (Beasthide)", "Leonin"]
+  DEXplus2 = ["Elf (High)", "Elf (Wood)", "Elf (Dark)", "Elf (Eladrin)", "Elf (Sea)", "Elf (Shadar-kai)", "Elf (Eladrin)", 
+  "Halfling (Lightfoot)", "Halfling (Stout)", "Aarakocra", "Halfling (Ghostwise)", "Feral Tiefling", "Kenku", "Tabaxi", 
+  "Goblin", "Kobold", "Shifter (Swiftstride)"]
+  DEXplus1 = ["Gnome (Forest)", "Gnome (Deep)", "Genasi (Air)", "Gnome (Deep)", "Bugbear", "Shifter (Longtooth)",
+  "Shifter (Wildhunt)", "Satyr"]
+  CONplus2 = ["Dwarf (Hill)", "Dwarf (Mountain)", "Genasi (Air)", "Genasi (Earth)", "Genasi (Fire)", "Genasi (Water)",
+  "Dwarf (Gray)", "Lizardfolk", "Hobgoblin", "Shifter (Beasthide)", "Loxodon", "Leonin"]
+  CONplus1 = ["Halfling (Stout)", "Gnome (Rock)", "Half Orc", "Goliath", "Aasimar (Scourge)", "Triton", "Goblin", "Orc",
+  "Elf (Sea)", "Elf (Shadar-kai)", "Verdan", "Minotaur"]
+  INTplus2 = ["Gnome (Forest)", "Gnome (Rock)", "Gnome (Deep)", "Vedalken"]
+  INTplus1 = ["Elf (High)", "Tiefling", "Elf (Eladrin)", "Genasi (Fire)", "Feral Tiefling", "Hobgoblin", "Yuan-ti",
+  "Githyanki", "Githzerai"]
+  WISplus2 = ["Firbolg", "Githzerai", "Kalashtar", "Shifter (Wildhunt)"]
+  WISplus1 = ["Dwarf (Hill)", "Elf (Wood)", "Aasimar (Protector)", "Aarakocra", "Genasi (Water)", "Halfling (Ghostwise)",
+  "Kenku", "Lizardfolk", "Tortle", "Centuar", "Loxodon", "Vedalken"]
+  CHAplus2 = ["Tiefling", "Aasimar (Protector)", "Aasimar (Scourge)", "Aasimar (Fallen)", "Yuan-ti", "Verdan", "Satyr"]
+  CHAplus1 = ["Elf (Dark)", "Halfling (Lightfoot)", "Tabaxi", "Triton", "Elf (Eladrin)", "Kalashtar", "Shifter (Swiftstride)", 
+  "Dragonborn (Black)", "Dragonborn (Blue)", "Dragonborn (Brass)", "Dragonborn (Bronze)", "Dragonborn (Copper)", "Dragonborn (Gold)", 
+  "Dragonborn (Green)", "Dragonborn (Red)", "Dragonborn (Silver)", "Dragonborn (White)",]
+  special = ["Human", "Half Elf", "Changeling", "Warfoged", "Simic Hybrid", "Fairy", "Harengon", "Owlin"]
+
+  bonuses = ["STRplus2", "STRplus1", "DEXplus2", "DEXplus1", "CONplus2", "CONplus1", "INTplus2", "INTplus1", "WISplus2", "WISplus1", "CHAplus2", "CHAplus1"]
+
+  for t in bonuses:
+    
+
+  
+
+  pass  
+
+
+def genArtificer(stats:list = [], Level:int = 1, Subclass:str = ""):
+    toptwo = ["INT"]
+    toptwo.append(random.choice(["DEX", "CON"]))
+    subclasses = ["Alchemist", "Armorer", "Artillerist", "Battle Smith"]
+    if Subclass == "":
+      Subclass = random.choice(subclasses)
+    if stats == []:
+      stats = genstats()
+    statblock = assignstats(stats, toptwo)
+
+  
+
+  
+  
+    pass
+def genBarbarian(Level:int = 1, Subclass:str = ""):   
+    pass
+def genBard(Level:int = 1, Subclass:str = ""):        
+    pass
+def genBlood_Hunter(Level:int = 1, Subclass:str = ""):
+    pass
+def genCleric(Level:int = 1, Subclass:str = ""):      
+    pass
+def genDruid(Level:int = 1, Subclass:str = ""):
+    pass
+def genFighter(Level:int = 1, Subclass:str = ""):
+    pass
+def genMonk(Level:int = 1, Subclass:str = ""):
+    pass
+def genPaladin(Level:int = 1, Subclass:str = ""):
+    pass
+def genRanger(Level:int = 1, Subclass:str = ""):
+    pass
+def genRogue(Level:int = 1, Subclass:str = ""):
+    pass
+def genSorcerer(Level:int = 1, Subclass:str = ""):
+    pass
+def genWarlock(Level:int = 1, Subclass:str = ""):
+    pass
+def genWizard(Level:int = 1, Subclass:str = ""):
+    pass
 
 
   
 
-#randchar
+def randchar(name:str = "", Level:int = 1, Class:str = "", Subclass:str = ""):
+  stats = genstats()
+  if Class == "":
+    Class = genclass()
+  if Class == 'Artificer':
+    genArtificer()     
+  if Class == 'Barbarian':
+    genBarbarian()        
+  if Class == 'Bard':
+    genBard()
+  if Class == 'Blood Hunter':
+    genBlood_Hunter()     
+  if Class == 'Cleric':
+    genCleric()
+  if Class == 'Druid':
+    genDruid()
+  if Class == 'Fighter':
+    genFighter()
+  if Class == 'Monk':
+    genMonk()
+  if Class == 'Paladin':
+    genPaladin()
+  if Class == 'Ranger':
+    genRanger()
+  if Class == 'Rogue':
+    genRogue()
+  if Class == 'Sorcerer':
+    genSorcerer()
+  if Class == 'Warlock':
+    genWarlock()
+  if Class == 'Wizard':
+    genWizard()
