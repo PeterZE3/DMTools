@@ -2,24 +2,21 @@ import random
 import string
 import math
 
-def roll(die_size:int = 20, mod:int = 0):
-  roll = random.randint(1,die_size)
-  mod = int(mod)
-  return roll + mod
 
-def genstats():
-   stats = []
-   for i in range(0,6):
-    rolls = []
-    for n in range(0,4):
-      num = roll(6)
-      rolls.append(num)
-    rolls.sort()
-    rolls.pop(0)
-    total = sum(rolls)
-    stats.append(total)
-   return stats
-        
+def roll(die_size: int = 20, mod: int = 0) -> int:
+    """Roll a single die with optional modifier."""
+
+    roll = random.randint(1, die_size)
+    mod = mod
+    return roll + mod
+
+def genstats() -> list[int]:
+    """Generate the starting stats for a PC using the 4d6 drop lowest method."""
+
+    num_stats = 6
+    num_dice = 4
+    dropped_dice = 1
+    return [sum(sorted(roll(6) for _ in range(num_dice))[dropped_dice:]) for _ in range(num_stats)]        
 
 def rolladv(show:bool = False, mod:int = 0):
   roll1 = random.randint(1,20)
@@ -169,9 +166,3 @@ def randnpc(name: string = "", CR: int = 1, num_profs: int = 2, num_lan: int = 2
   statprint = statblock["STR"] + " " + statblock["DEX"] + " " + statblock["CON"] + " " + statblock["INT"] + " " + statblock["WIS"] + " " + statblock["CHA"]
   printout = f"Name:{name}\nRace:{race}\nHit Points:{hp}\n{statprint}\nProfiency Bonus: +{profbonus}\nSaves:{printsaves}\nProfiencies:{printprofs}\nLanguages:{printlan}"
   return printout
-
-
-
-  
-
-#randchar
