@@ -7,7 +7,6 @@ def roll(die_size: int = 20, mod: int = 0) -> int:
     """Roll a single die with optional modifier."""
 
     roll = random.randint(1, die_size)
-    mod = mod
     return roll + mod
 
 def genstats() -> list[int]:
