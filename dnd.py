@@ -1,4 +1,4 @@
-from os import stat
+
 import random
 import string
 import math
@@ -47,6 +47,28 @@ def rolldisadv(show:bool = False, mod:int = 0):
   else:
     roll = roll1
   return roll + mod
+
+
+def massroll(num_rolls:int, mod:int = 0, die_size:int = 20):
+  i = 0
+  rolls = []
+  while i <+ num_rolls:
+    rolls.append(roll(die_size, mod))
+    i += 1
+  return rolls
+
+def masssave(num_rolls:int, DC:int, mod:int = 0, die_size:int = 20):
+  rolls = massroll(num_rolls, mod)
+  save_fail = []
+  for roll in rolls:
+    if roll < DC:
+      save_fail.append("Failed")
+    if roll >= DC:
+      save_fail.append("Saved")
+  print(rolls)
+  print(save_fail)
+  return
+
 
 def modcalc(stat:int):
   mod = (stat - 10) // 2
@@ -176,6 +198,78 @@ def genclass():
   choice = random.choice(classes)
   return choice
 
+def genweapons(num_choices: int, list_choice: str):
+  simple_melee = ["Club", "Dagger", "Greatclub", "Handaxe", "Javelin", "Light Hammer", "Mace", "Quarterstaff", "Sickle", "Spear"]
+  simple_ranged = ["Light Crossbow", "Dart", "Shortbow", "Sling"]
+  martial_melee = ["Battleaxe", "Flail", "Glaive", "Greataxe", "Greatsword", "Halberd", "Lance", "Longsword", "Maul", "Morningstar",
+   "Pike", "Rapier", "Scimitar", "Shortsword", "Trident", "War Pick", "Warhammer", "Whip"]
+  martial_ranged = ["Blowgun", "Hand Crossbow", "Heavy Crossbow", "Longbow", "Net"]
+  
+  options = []
+  
+  if list_choice == "simple_melee":
+    options = simple_melee
+  elif list_choice == "simple_ranged":
+    options = simple_ranged
+  elif list_choice == "martial_melee":
+    options = martial_melee
+  elif list_choice == "martial_ranged":
+    options = martial_ranged
+
+  choices = []
+  i = 0
+
+  while i != num_choices:
+    num = random.randint(0, (len(options)-1))
+    choice = options.pop(num)
+    choices.append(choice)
+    i += 1
+
+  return choices
+
+def gentools(num_choices: int, list_choice: str):
+  art_tools = ["Alchemists supplies", "Brewers supplies", "Calligraphers Supplies", "Carpenters tools", "Cartographers tools", "Cobblers tools",
+  "Cooks utensils", "Glassblowers tools", "Jewelers tools", "Leatherworkers tools", "Masons tools", "Painters supplies", "Potters tools", "Smiths tools",
+  "Tinkers tools", "Weavers tools", "Woodcarvers tools", "Navigators tools", "Thieves tools", "Vehicles(land)", "Vehicles(water)"]
+  gaming_sets = ["Dice set", "Playing card set"]
+  instruments = ["Bagpipes", "Drum", "Dulcimer", "Flute", "Lute", "Lyre", "Horn", "Pan Flute", "Shawm", "Viol"]
+
+  options = []
+  
+  if list_choice == "art_tools":
+    options = art_tools
+  elif list_choice == "gaming_sets":
+    options = gaming_sets
+  elif list_choice == "instruments":
+    options = instruments
+
+  choices = []
+  i = 0
+
+  while i != num_choices:
+    num = random.randint(0, (len(options)-1))
+    choice = options.pop(num)
+    choices.append(choice)
+    i += 1
+
+  return choices
+
+
+def ASI(statblock: dict):
+  options = ["+2", "+1"]
+  choice = random.choice(options)
+  stat_options = ["STR", "DEX", "CON", "INT", "WIS", "CHA"]
+
+  if choice == "+2":
+    stat = random.choice(stat_options)
+    statblock[stat] += 2
+  elif choice == "+1":
+    stat = random.choice(stat_options)
+    statblock[stat] += 1
+    stat = random.choice(stat_options)
+    statblock[stat] += 1
+
+  return statblock
 
 
 
@@ -264,24 +358,84 @@ def racialbonus(statblock:dict, race:str):
   "Githyanki", "Githzerai"]
   WISplus2 = ["Firbolg", "Githzerai", "Kalashtar", "Shifter (Wildhunt)"]
   WISplus1 = ["Dwarf (Hill)", "Elf (Wood)", "Aasimar (Protector)", "Aarakocra", "Genasi (Water)", "Halfling (Ghostwise)",
-  "Kenku", "Lizardfolk", "Tortle", "Centuar", "Loxodon", "Vedalken"]
+  "Kenku", "Lizardfolk", "Tortle", "Centuar", "Loxodon", "Vedalken", "Centaur"]
   CHAplus2 = ["Tiefling", "Aasimar (Protector)", "Aasimar (Scourge)", "Aasimar (Fallen)", "Yuan-ti", "Verdan", "Satyr"]
   CHAplus1 = ["Elf (Dark)", "Halfling (Lightfoot)", "Tabaxi", "Triton", "Elf (Eladrin)", "Kalashtar", "Shifter (Swiftstride)", 
   "Dragonborn (Black)", "Dragonborn (Blue)", "Dragonborn (Brass)", "Dragonborn (Bronze)", "Dragonborn (Copper)", "Dragonborn (Gold)", 
   "Dragonborn (Green)", "Dragonborn (Red)", "Dragonborn (Silver)", "Dragonborn (White)",]
   special = ["Human", "Half Elf", "Changeling", "Warfoged", "Simic Hybrid", "Fairy", "Harengon", "Owlin"]
 
-  bonuses = ["STRplus2", "STRplus1", "DEXplus2", "DEXplus1", "CONplus2", "CONplus1", "INTplus2", "INTplus1", "WISplus2", "WISplus1", "CHAplus2", "CHAplus1"]
+  i = 0
+  stat_types = ["STR", "DEX", "CON", "INT", "WIS", "CHA"]
 
-  for t in bonuses:
-    
+  if race in STRplus2:
+    statblock["STR"] += 2
+  if race in STRplus1:
+    statblock["STR"] += 1
+  if race in DEXplus2:
+    statblock["DEX"] += 2
+  if race in DEXplus1:
+    statblock["DEX"] += 1  
+  if race in CONplus2:
+    statblock["CON"] += 2
+  if race in CONplus1:
+    statblock["CON"] += 1
+  if race in INTplus2:
+    statblock["INT"] += 2
+  if race in INTplus1:
+    statblock["INT"] += 1
+  if race in WISplus2:
+    statblock["WIS"] += 2
+  if race in WISplus1:
+    statblock["WIS"] += 1
+  if race in CHAplus2:
+    statblock["CHA"] += 2
+  if race in CHAplus1:
+    statblock["CHA"] += 1
+  if race in special:
+    if race == "Human": #+1 to all stats
+      for t in stat_types:
+        statblock[t] += 1
+    if race == "Half Elf": #+2 to Cha and +1 to 2 random stats
+      statblock["CHA"] += 2
+      while i < 2:
+        choice = random.choice(stat_types)
+        statblock[choice] += 1
+        stat_types.remove(choice)
+        i += 1
+    if race == "Changling": #+2 to Cha and +1 to 1 random stat
+      statblock["CHA"] += 2
+      statblock[random.choice(stat_types)] += 1
+    if race == "Warforged" or race == "Simic Hybrid": #+2 to Con and +1 to 1 random stat
+      statblock["CON"] += 2
+      statblock[random.choice(stat_types)] += 1
+    if race == "Fairy" or race == "Harengon": #+2 to a random stat and +1 to another random stat, or +1 to 3 random stats
+      N = random.randint(0,1)
+      if N == 0:
+        choice = random.choice(stat_types)
+        statblock[choice] += 2
+        stat_types.remove(choice)
+        choice = random.choice(stat_types)
+        statblock[choice] += 1
+        stat_types.remove(choice)
 
-  
+      if N == 1:
+        while i < 3:
+          choice = random.choice(stat_types)
+          statblock[choice] += 1
+          stat_types.remove(choice)
+          i += 1
+    if race == "Owlin": #+2 to a random stat and +1 to another random stat
+      choice = random.choice(stat_types)
+      statblock[choice] += 2
+      stat_types.remove(choice)
+      choice = random.choice(stat_types)
+      statblock[choice] += 1
+      stat_types.remove(choice)
+  return statblock
 
-  pass  
 
-
-def genArtificer(stats:list = [], Level:int = 1, Subclass:str = ""):
+def genArtificer(Level:int = 1, stats:list = [],  Subclass:str = "", race:str = ""):
     toptwo = ["INT"]
     toptwo.append(random.choice(["DEX", "CON"]))
     subclasses = ["Alchemist", "Armorer", "Artillerist", "Battle Smith"]
@@ -290,6 +444,111 @@ def genArtificer(stats:list = [], Level:int = 1, Subclass:str = ""):
     if stats == []:
       stats = genstats()
     statblock = assignstats(stats, toptwo)
+    if race == "":
+      race = genrace()
+    statblock = racialbonus(statblock, race)
+    profs = {
+      "saves" : ["CON", "INT"],
+      "armor" : ["Light", "Medium", "Shields"],
+      "weapons" : ["simple", "firearms"],
+      "skills" : [],
+      "Tools" : ["Thieves Tools", "Tinkers Tools"]
+    }
+
+    art_tools = ["Alchemists supplies", "Brewers supplies", "Calligraphers Supplies", "Carpenters tools", "Cartographers tools", "Cobblers tools",
+    "Cooks utensils", "Glassblowers tools", "Jewelers tools", "Leatherworkers tools", "Masons tools", "Painters supplies", "Potters tools", "Smiths tools", 
+    "Weavers tools", "Woodcarvers tools", "Navigators tools", "Vehicles(land)", "Vehicles(water)"]
+
+    profs["Tools"].append(random.choice(art_tools))
+
+
+
+    total_profs = 2
+    options = ["Sleight of Hand", "Arcana", "History",
+    "Investigation", "Nature", "Medicine", "Perception"]
+    i = 0
+    while i != total_profs:
+      num = random.randint(0, (len(options)-1))
+      choice = options.pop(num)
+      profs["skills"].append(choice)
+      i += 1
+
+    equipment = ["Light Crossbow and 20 bolts", "Thieves Tools", "Dungeoneers Pack"]
+
+    armor_choices = ["Studded Leather", "Scale Mail"]
+    equipment.append(random.choice(armor_choices))
+
+    weapons = genweapons(2, "simple_melee")
+
+    for e in weapons:
+      equipment.append(e)
+
+    abilities = []
+
+    if Level >= 1:
+      abilities.append("Magical Tinkering")
+    if Level >= 2:
+      abilities.append("Infuse Item")
+    if Level >= 3:
+      abilities.append("Right Tool for the Job")
+      #Subclass Ability
+    if Level >= 4:
+      statblock = ASI(statblock)
+    if Level >= 5:
+      pass #Subclass Ability
+    if Level >= 6:
+      abilities.append("Tool Expertise")
+    if Level >= 7:
+      abilities.append("Flash of Genius")
+    if Level >= 8:
+      statblock = ASI(statblock)
+    if Level >= 9:
+      pass #Subclass Ability
+    if Level >= 10:
+      abilities.append("Magic Item Adept")
+    if Level >= 11:
+      abilities.append("Spell-Storing Item")
+    if Level >= 12:
+      statblock = ASI(statblock)
+    if Level >= 13:
+      pass #Nothing
+    if Level >= 14:
+      abilities.append("Magic Item Savant")
+    if Level >= 15:
+      pass #Subclass Ability
+    if Level >= 16:
+      statblock = ASI(statblock)
+    if Level >= 17:
+      pass #Nothing
+    if Level >= 18:
+      abilities.append("Magic Item Master")
+    if Level >= 19:
+      statblock = ASI(statblock)
+    if Level >= 20:
+      abilities.append("Soul of Artifice")
+
+    #Spells
+    #infusions
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    print(race)
+    print(statblock)
+    print(toptwo)
+    print(profs)
+    print(equipment)
+
 
   
 
